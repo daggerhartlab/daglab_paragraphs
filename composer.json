@@ -1,0 +1,18 @@
+{
+    "name": "daggerhartlab/daglab_paragraphs",
+    "description": "Drupal module with reports and cleanup tools for paragraphs.",
+    "type": "drupal-module",
+    "license": "GPL-2.0-or-later",
+    "authors": [
+        {
+            "name": "Jonathan Daggerhart",
+            "email": "jonathan@daggerhartlab.com"
+        }
+    ],
+    "require": {
+        "drupal/paragraphs": "^1.23"
+    },
+    "require-dev": {
+        "drupal/block_field": "^1.0@RC"
+    }
+}

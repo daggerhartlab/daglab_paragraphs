@@ -1,0 +1,10 @@
+daglab_paragraphs.usage_report.tab:
+  title: 'In Use'
+  route_name: daglab_paragraphs.usage_report
+  base_route: daglab_paragraphs.usage_report
+
+daglab_paragraphs.unused_report.tab:
+  title: 'Unused'
+  route_name: daglab_paragraphs.unused_report
+  base_route: daglab_paragraphs.usage_report
+  weight: 10

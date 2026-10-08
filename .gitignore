@@ -1,0 +1,17 @@
+# Dependencies installed when developing or testing the module on its own.
+/vendor/
+/node_modules/
+composer.lock
+
+# PHPUnit: local config (it holds database credentials) and caches.
+phpunit.xml
+.phpunit.result.cache
+.phpunit.cache/
+
+# Editors and operating systems.
+.idea/
+.vscode/
+*.swp
+*~
+.DS_Store
+Thumbs.db

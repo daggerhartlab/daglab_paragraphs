@@ -1,0 +1,78 @@
+daglab_paragraphs.usage_report:
+  path: '/admin/reports/daglab/paragraphs'
+  defaults:
+    _controller: '\Drupal\daglab_paragraphs\Controller\ParagraphUsageController::usage'
+    _title: 'Paragraph Usage'
+  requirements:
+    _permission: 'access site reports'
+
+daglab_paragraphs.usage_type:
+  path: '/admin/reports/daglab/paragraphs/type/{paragraphs_type}'
+  defaults:
+    _controller: '\Drupal\daglab_paragraphs\Controller\ParagraphUsageController::type'
+    _title_callback: '\Drupal\daglab_paragraphs\Controller\ParagraphUsageController::typeTitle'
+  requirements:
+    _permission: 'access site reports'
+  options:
+    parameters:
+      paragraphs_type:
+        type: entity:paragraphs_type
+
+daglab_paragraphs.unused_report:
+  path: '/admin/reports/daglab/paragraphs/unused'
+  defaults:
+    _controller: '\Drupal\daglab_paragraphs\Controller\ParagraphUsageController::unused'
+    _title: 'Unused Paragraphs'
+  requirements:
+    _permission: 'access site reports'
+
+daglab_paragraphs.delete_orphans:
+  path: '/admin/reports/daglab/paragraphs/unused/{paragraphs_type}/delete-orphans'
+  defaults:
+    _form: '\Drupal\daglab_paragraphs\Form\DeleteOrphansForm'
+    _title: 'Delete Orphaned Paragraphs'
+  requirements:
+    _permission: 'daglab delete orphaned paragraphs'
+  options:
+    parameters:
+      paragraphs_type:
+        type: entity:paragraphs_type
+
+daglab_paragraphs.references:
+  path: '/admin/reports/daglab/paragraphs/unused/{paragraphs_type}/references'
+  defaults:
+    _controller: '\Drupal\daglab_paragraphs\Controller\ParagraphUsageController::references'
+    _title_callback: '\Drupal\daglab_paragraphs\Controller\ParagraphUsageController::referencesTitle'
+  requirements:
+    _permission: 'access site reports'
+  options:
+    parameters:
+      paragraphs_type:
+        type: entity:paragraphs_type
+
+daglab_paragraphs.delete_older_revisions:
+  path: '/admin/reports/daglab/paragraphs/unused/{paragraphs_type}/delete-older-revisions'
+  defaults:
+    _form: '\Drupal\daglab_paragraphs\Form\DeleteOlderRevisionsForm'
+    _title: 'Delete Older Revisions'
+  requirements:
+    _permission: 'daglab delete older revisions holding paragraphs'
+  options:
+    parameters:
+      paragraphs_type:
+        type: entity:paragraphs_type
+
+daglab_paragraphs.paragraph:
+  path: '/admin/reports/daglab/paragraphs/paragraph/{paragraph}'
+  defaults:
+    _controller: '\Drupal\daglab_paragraphs\Controller\ParagraphUsageController::paragraph'
+    _title_callback: '\Drupal\daglab_paragraphs\Controller\ParagraphUsageController::paragraphTitle'
+  requirements:
+    _permission: 'access site reports'
+  options:
+    # Render in the front-end theme, so the paragraph looks as it does on the
+    # site.
+    _admin_route: FALSE
+    parameters:
+      paragraph:
+        type: entity:paragraph

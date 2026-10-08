@@ -1,0 +1,9 @@
+daglab delete orphaned paragraphs:
+  title: 'Delete orphaned paragraphs'
+  description: 'Permanently delete paragraphs that no revision of any page or other host references.'
+  restrict access: true
+
+daglab delete older revisions holding paragraphs:
+  title: 'Delete older revisions holding unused paragraphs'
+  description: 'Permanently delete the older revisions of pages and blocks that are all that still reference a paragraph type. Each revision also needs the usual permission to delete it.'
+  restrict access: true

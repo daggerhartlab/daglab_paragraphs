@@ -1,0 +1,12 @@
+name: 'DagLab Paragraphs'
+type: module
+description: 'Improvements and management tools for paragraphs.'
+package: Daggerhart Lab
+core_version_requirement: ^11.1
+configure: daglab_paragraphs.usage_report
+dependencies:
+  - drupal:node
+  - paragraphs:paragraphs
+# Only needed to run the block field tests, which skip without it.
+test_dependencies:
+  - block_field:block_field

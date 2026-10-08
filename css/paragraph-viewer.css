@@ -1,0 +1,17 @@
+/**
+ * Paragraph viewer: the paragraph as the site shows it, then its details.
+ */
+.daglab-paragraph-viewer__preview {
+  padding: 80px 0;
+}
+
+.daglab-paragraph-viewer__details {
+  max-width: 960px;
+  margin: 40px auto;
+  padding: 40px 16px;
+  border-top: 2px dashed #ccc;
+}
+
+.daglab-paragraph-viewer__warning {
+  font-weight: bold;
+}

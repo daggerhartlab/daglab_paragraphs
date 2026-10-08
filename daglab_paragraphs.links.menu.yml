@@ -1,0 +1,5 @@
+daglab_paragraphs.usage_report:
+  title: 'Paragraph Usage'
+  description: 'List of paragraph types and which pages they appear on.'
+  parent: system.admin_reports
+  route_name: daglab_paragraphs.usage_report

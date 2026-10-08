@@ -1,0 +1,4 @@
+paragraph_viewer:
+  css:
+    theme:
+      css/paragraph-viewer.css: {}
