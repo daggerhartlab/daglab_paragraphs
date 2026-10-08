@@ -10,3 +10,7 @@ dependencies:
 # Only needed to run the block field tests, which skip without it.
 test_dependencies:
   - block_field:block_field
+
+# Information added by the release workflow on 2026-10-08
+version: '1.0.0'
+datestamp: 1791495604
