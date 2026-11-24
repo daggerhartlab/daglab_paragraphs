@@ -3,10 +3,13 @@
 namespace Drupal\Tests\daglab_paragraphs\Kernel;
 
 use Drupal\paragraphs\Entity\Paragraph;
+use Drupal\paragraphs\ParagraphInterface;
 use Drupal\user\Entity\User;
 use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
+ * Tests how paragraph usage and orphans are found.
+ *
  * @group daglab_paragraphs
  */
 #[RunTestsInSeparateProcesses]
@@ -44,7 +47,7 @@ class ParagraphUsageAnalyzerTest extends ParagraphsKernelTestBase {
   /**
    * A stored parent that does reference the paragraph is confirmed.
    */
-  public function testParentReferencesConfirmsARealParent(): void {
+  public function testParentReferencesConfirmsRealParent(): void {
     $this->createParagraphType('hero');
     $hero = Paragraph::create(['type' => 'hero']);
     $this->createPage([$hero]);
@@ -108,8 +111,10 @@ class ParagraphUsageAnalyzerTest extends ParagraphsKernelTestBase {
   }
 
   /**
-   * A paragraph dropped from a node's current revision stays reachable via the
-   * old revision, so it is not reported as an orphan.
+   * A paragraph kept only by an old node revision is not an orphan.
+   *
+   * Dropping it from the current revision leaves it reachable through the old
+   * one.
    */
   public function testParagraphKeptOnlyByAnOldRevisionIsNotOrphaned(): void {
     $this->createParagraphType('hero');
@@ -153,7 +158,7 @@ class ParagraphUsageAnalyzerTest extends ParagraphsKernelTestBase {
     $this->createParagraphType('banner');
 
     $orphans = [];
-    foreach ([1, 2] as $i) {
+    for ($n = 0; $n < 2; $n++) {
       $orphan = Paragraph::create(['type' => 'hero']);
       $orphan->save();
       $orphans[] = $orphan->id();
@@ -165,10 +170,12 @@ class ParagraphUsageAnalyzerTest extends ParagraphsKernelTestBase {
     ]);
 
     $this->assertSame($orphans, $this->analyzer()->orphanedParagraphIds('hero'));
-    $this->assertSame(['hero' => [
-      'count' => 2,
-      'example_paragraph_id' => (int) $orphans[0],
-    ]], $this->analyzer()->orphanSummary());
+    $this->assertSame([
+      'hero' => [
+        'count' => 2,
+        'example_paragraph_id' => (int) $orphans[0],
+      ],
+    ], $this->analyzer()->orphanSummary());
   }
 
   /**
@@ -221,7 +228,7 @@ class ParagraphUsageAnalyzerTest extends ParagraphsKernelTestBase {
     $this->createParagraphType('hero');
 
     $nids = [];
-    foreach ([1, 2] as $i) {
+    for ($n = 0; $n < 2; $n++) {
       // Two of the same type on one node still counts the node once.
       $nids[] = (int) $this->createPage([
         Paragraph::create(['type' => 'hero']),
@@ -274,7 +281,8 @@ class ParagraphUsageAnalyzerTest extends ParagraphsKernelTestBase {
         'paragraph_id' => (int) $hero->id(),
         'revision_id' => (int) $hero->getRevisionId(),
       ],
-    ]], $this->analyzer()->hostReferences('hero'));
+    ],
+    ], $this->analyzer()->hostReferences('hero'));
   }
 
   /**
@@ -330,6 +338,7 @@ class ParagraphUsageAnalyzerTest extends ParagraphsKernelTestBase {
     ]);
 
     $wrapper = $node->get('field_paragraphs')->entity;
+    assert($wrapper instanceof ParagraphInterface);
     $wrapper->set('field_children', []);
     $this->saveNewRevision($node, [$wrapper]);
 

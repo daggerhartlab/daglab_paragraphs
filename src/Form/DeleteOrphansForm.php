@@ -27,15 +27,15 @@ class DeleteOrphansForm extends ConfirmFormBase {
   /**
    * The paragraph type whose orphans are being deleted.
    */
-  private ParagraphsTypeInterface $paragraphsType;
+  protected ParagraphsTypeInterface $paragraphsType;
 
   /**
    * Number of orphans found when the form was built.
    */
-  private int $orphanCount = 0;
+  protected int $orphanCount = 0;
 
-  public function __construct(
-    private readonly ParagraphUsageAnalyzer $usageAnalyzer,
+  final public function __construct(
+    protected ParagraphUsageAnalyzer $usageAnalyzer,
   ) {}
 
   /**

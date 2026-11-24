@@ -31,16 +31,16 @@ class DeleteOlderRevisionsForm extends ConfirmFormBase {
   /**
    * The paragraph type whose referencing revisions are being deleted.
    */
-  private ParagraphsTypeInterface $paragraphsType;
+  protected ParagraphsTypeInterface $paragraphsType;
 
   /**
    * Host entries from the analyzer, as of when the form was built.
    */
-  private array $hosts = [];
+  protected array $hosts = [];
 
-  public function __construct(
-    private readonly ParagraphUsageAnalyzer $usageAnalyzer,
-    private readonly EntityTypeManagerInterface $entityTypeManager,
+  final public function __construct(
+    protected ParagraphUsageAnalyzer $usageAnalyzer,
+    protected EntityTypeManagerInterface $entityTypeManager,
   ) {}
 
   /**

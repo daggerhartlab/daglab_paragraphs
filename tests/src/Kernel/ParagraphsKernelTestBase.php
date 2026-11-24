@@ -30,6 +30,9 @@ abstract class ParagraphsKernelTestBase extends KernelTestBase {
 
   use UserCreationTrait;
 
+  /**
+   * {@inheritdoc}
+   */
   protected static $modules = [
     'system',
     'user',
@@ -43,6 +46,9 @@ abstract class ParagraphsKernelTestBase extends KernelTestBase {
     'daglab_paragraphs',
   ];
 
+  /**
+   * {@inheritdoc}
+   */
   protected function setUp(): void {
     parent::setUp();
     $this->installEntitySchema('user');

@@ -5,6 +5,7 @@ namespace Drupal\daglab_paragraphs\Controller;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\RevisionableStorageInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Pager\PagerManagerInterface;
 use Drupal\Core\Url;
@@ -48,7 +49,7 @@ class ParagraphUsageController extends ControllerBase {
     'daglab_paragraphs:usage',
   ];
 
-  public function __construct(
+  final public function __construct(
     private readonly ParagraphUsageAnalyzer $usageAnalyzer,
     private readonly PagerManagerInterface $pagerManager,
     private readonly RequestStack $requestStack,
@@ -142,7 +143,6 @@ class ParagraphUsageController extends ControllerBase {
     ];
   }
 
-
   /**
    * Sorts rows by the table header the current request asks for.
    *
@@ -173,7 +173,8 @@ class ParagraphUsageController extends ControllerBase {
    * Lists the published pages one paragraph type appears on.
    */
   public function type(ParagraphsTypeInterface $paragraphs_type): array {
-    $details = $this->usageAnalyzer->publishedUsageDetails()[$paragraphs_type->id()] ?? ['nids' => [], 'block_ids' => []];
+    $details = $this->usageAnalyzer->publishedUsageDetails()[$paragraphs_type->id()]
+      ?? ['nids' => [], 'block_ids' => []];
     $nids = $details['nids'];
     $orphans = $this->usageAnalyzer->orphanSummary()[$paragraphs_type->id()]['count'] ?? 0;
 
@@ -252,7 +253,7 @@ class ParagraphUsageController extends ControllerBase {
    * Lists placed blocks, with where each is placed.
    *
    * @param array $block_ids
-   *   block_content entity ids.
+   *   Block content entity IDs.
    *
    * @return array
    *   Items for an item list.
@@ -300,7 +301,6 @@ class ParagraphUsageController extends ControllerBase {
       ],
     ];
   }
-
 
   /**
    * Title callback for a paragraph type's usage page.
@@ -649,8 +649,10 @@ class ParagraphUsageController extends ControllerBase {
   public function paragraph(ParagraphInterface $paragraph, Request $request): array {
     $shown = $paragraph;
     if ($revision_id = $request->query->get('revision')) {
-      $shown = $this->entityTypeManager()->getStorage('paragraph')->loadRevision($revision_id);
-      if (!$shown || $shown->id() !== $paragraph->id()) {
+      $storage = $this->entityTypeManager()->getStorage('paragraph');
+      assert($storage instanceof RevisionableStorageInterface);
+      $shown = $storage->loadRevision($revision_id);
+      if (!$shown instanceof ParagraphInterface || $shown->id() !== $paragraph->id()) {
         throw new NotFoundHttpException();
       }
     }
@@ -677,7 +679,7 @@ class ParagraphUsageController extends ControllerBase {
           '@revision' => $shown->getRevisionId(),
           '@current' => $paragraph->getRevisionId(),
         ]),
-      $this->t('Created: @date', ['@date' => $this->dateFormatter->format($paragraph->getCreatedTime(), 'short')]),
+      $this->t('Created: @date', ['@date' => $this->dateFormatter->format((int) $paragraph->get('created')->value, 'short')]),
       $shown->isPublished() ? $this->t('Status: Published') : $this->t('Status: Unpublished'),
       $this->storedParentItem($paragraph),
     ];

@@ -5,6 +5,7 @@ namespace Drupal\daglab_paragraphs;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Entity\Sql\DefaultTableMapping;
 use Drupal\Core\Entity\Sql\SqlContentEntityStorage;
 use Drupal\paragraphs\ParagraphInterface;
 
@@ -566,7 +567,8 @@ class ParagraphUsageAnalyzer {
     }
     unset($host);
 
-    usort($hosts, fn ($a, $b) => [$b['current'], $a['entity_type'], $a['id']] <=> [$a['current'], $b['entity_type'], $b['id']]);
+    usort($hosts, fn ($a, $b) =>
+      [$b['current'], $a['entity_type'], $a['id']] <=> [$a['current'], $b['entity_type'], $b['id']]);
     return $hosts;
   }
 
@@ -931,6 +933,9 @@ class ParagraphUsageAnalyzer {
     }
 
     $table_mapping = $storage->getTableMapping();
+    if (!$table_mapping instanceof DefaultTableMapping) {
+      return [];
+    }
     $schema = $this->database->schema();
     $revisionable = $this->entityTypeManager->getDefinition($entity_type_id)->isRevisionable();
     $tables = [];

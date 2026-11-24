@@ -1,0 +1,71 @@
+name: Tests
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  phpunit:
+    name: PHPUnit (Drupal ${{ matrix.drupal }}, PHP ${{ matrix.php }})
+    runs-on: ubuntu-latest
+    # The next-version job reports early breakage without failing the run.
+    continue-on-error: ${{ matrix.experimental }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { drupal: '^11',      php: '8.3', stability: stable, experimental: false }
+          - { drupal: '^11',      php: '8.5', stability: stable, experimental: false }
+          - { drupal: '11.x-dev', php: '8.5', stability: dev,    experimental: true }
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: drupal
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=20
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: daggerhartlab/devops-shared-actions/.github/actions/setup-runner@v1
+        with:
+          php_version: ${{ matrix.php }}
+          php_extensions: gd, pdo_mysql
+
+      - uses: daggerhartlab/devops-shared-actions/.github/actions/drupal-module-test@v1
+        with:
+          drupal: ${{ matrix.drupal }}
+          stability: ${{ matrix.stability }}
+          simpletest_db: mysql://root:root@127.0.0.1:3306/drupal
+
+  code-quality:
+    name: Code quality
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: daggerhartlab/devops-shared-actions/.github/actions/setup-runner@v1
+        with:
+          php_version: '8.3'
+
+      - uses: daggerhartlab/devops-shared-actions/.github/actions/drupal-module-test@v1
+        with:
+          phpunit: false
+          phpcs: true
+          phpstan: true

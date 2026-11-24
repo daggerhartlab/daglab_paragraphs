@@ -7,6 +7,8 @@ use Drupal\paragraphs\Entity\Paragraph;
 use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
+ * Tests the form that deletes orphaned paragraphs.
+ *
  * @group daglab_paragraphs
  */
 #[RunTestsInSeparateProcesses]
@@ -21,7 +23,7 @@ class DeleteOrphansFormTest extends ParagraphsKernelTestBase {
 
     // Orphans of the type being cleaned up.
     $orphans = [];
-    foreach ([1, 2, 3] as $i) {
+    for ($n = 0; $n < 3; $n++) {
       $orphan = Paragraph::create(['type' => 'hero']);
       $orphan->save();
       $orphans[] = $orphan->id();

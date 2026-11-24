@@ -23,16 +23,23 @@ use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 #[RunTestsInSeparateProcesses]
 class ParagraphBlockUsageTest extends ParagraphsKernelTestBase {
 
+  /**
+   * {@inheritdoc}
+   */
   protected static $modules = [
     'block',
     'block_content',
     'block_field',
   ];
 
+  /**
+   * {@inheritdoc}
+   */
   protected function setUp(): void {
     // Check before the parent tries to enable it. Drupal 11.4 sets the root
     // before setUp(); older versions only inside it.
-    $root = isset($this->root) ? $this->root : static::getDrupalRoot();
+    // @phpstan-ignore staticMethod.deprecated (fallback for Drupal < 11.4)
+    $root = $this->root ?? static::getDrupalRoot();
     $modules = (new ExtensionDiscovery($root, FALSE))->scan('module');
     if (!isset($modules['block_field'])) {
       $this->markTestSkipped('The block_field module is not available.');
@@ -133,7 +140,8 @@ class ParagraphBlockUsageTest extends ParagraphsKernelTestBase {
       'theme' => 'stark',
       'region' => 'content',
       'enabled' => TRUE,
-    ]], $host['placements']);
+    ],
+    ], $host['placements']);
     $this->assertCount(1, $host['embedded_in']);
     $this->assertSame('node', $host['embedded_in'][0]['entity_type']);
     $this->assertSame((int) $node->id(), $host['embedded_in'][0]['id']);
