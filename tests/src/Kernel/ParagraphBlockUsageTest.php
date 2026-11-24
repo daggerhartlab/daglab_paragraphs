@@ -38,6 +38,7 @@ class ParagraphBlockUsageTest extends ParagraphsKernelTestBase {
   protected function setUp(): void {
     // Check before the parent tries to enable it. Drupal 11.4 sets the root
     // before setUp(); older versions only inside it.
+    // @phpstan-ignore staticMethod.deprecated (fallback for Drupal < 11.4)
     $root = $this->root ?? static::getDrupalRoot();
     $modules = (new ExtensionDiscovery($root, FALSE))->scan('module');
     if (!isset($modules['block_field'])) {

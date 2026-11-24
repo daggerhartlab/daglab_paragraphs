@@ -3,6 +3,7 @@
 namespace Drupal\Tests\daglab_paragraphs\Kernel;
 
 use Drupal\paragraphs\Entity\Paragraph;
+use Drupal\paragraphs\ParagraphInterface;
 use Drupal\user\Entity\User;
 use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
@@ -337,6 +338,7 @@ class ParagraphUsageAnalyzerTest extends ParagraphsKernelTestBase {
     ]);
 
     $wrapper = $node->get('field_paragraphs')->entity;
+    assert($wrapper instanceof ParagraphInterface);
     $wrapper->set('field_children', []);
     $this->saveNewRevision($node, [$wrapper]);
 
