@@ -566,7 +566,8 @@ class ParagraphUsageAnalyzer {
     }
     unset($host);
 
-    usort($hosts, fn ($a, $b) => [$b['current'], $a['entity_type'], $a['id']] <=> [$a['current'], $b['entity_type'], $b['id']]);
+    usort($hosts, fn ($a, $b) =>
+      [$b['current'], $a['entity_type'], $a['id']] <=> [$a['current'], $b['entity_type'], $b['id']]);
     return $hosts;
   }
 

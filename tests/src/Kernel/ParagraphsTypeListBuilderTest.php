@@ -5,6 +5,8 @@ namespace Drupal\Tests\daglab_paragraphs\Kernel;
 use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
+ * Tests the usage columns on the paragraph types list.
+ *
  * @group daglab_paragraphs
  */
 #[RunTestsInSeparateProcesses]

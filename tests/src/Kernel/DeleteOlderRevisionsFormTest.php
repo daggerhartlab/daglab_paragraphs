@@ -9,13 +9,21 @@ use Drupal\paragraphs\ParagraphsTypeInterface;
 use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
+ * Tests the form that deletes older paragraph revisions.
+ *
  * @group daglab_paragraphs
  */
 #[RunTestsInSeparateProcesses]
 class DeleteOlderRevisionsFormTest extends ParagraphsKernelTestBase {
 
+  /**
+   * The paragraph type whose revisions are cleaned up.
+   */
   private ParagraphsTypeInterface $hero;
 
+  /**
+   * {@inheritdoc}
+   */
   protected function setUp(): void {
     parent::setUp();
     $this->hero = $this->createParagraphType('hero');

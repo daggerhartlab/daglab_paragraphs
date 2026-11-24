@@ -9,6 +9,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
+ * Tests the paragraph usage report pages.
+ *
  * @group daglab_paragraphs
  */
 #[RunTestsInSeparateProcesses]

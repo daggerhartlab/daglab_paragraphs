@@ -142,7 +142,6 @@ class ParagraphUsageController extends ControllerBase {
     ];
   }
 
-
   /**
    * Sorts rows by the table header the current request asks for.
    *
@@ -173,7 +172,8 @@ class ParagraphUsageController extends ControllerBase {
    * Lists the published pages one paragraph type appears on.
    */
   public function type(ParagraphsTypeInterface $paragraphs_type): array {
-    $details = $this->usageAnalyzer->publishedUsageDetails()[$paragraphs_type->id()] ?? ['nids' => [], 'block_ids' => []];
+    $details = $this->usageAnalyzer->publishedUsageDetails()[$paragraphs_type->id()]
+      ?? ['nids' => [], 'block_ids' => []];
     $nids = $details['nids'];
     $orphans = $this->usageAnalyzer->orphanSummary()[$paragraphs_type->id()]['count'] ?? 0;
 
@@ -252,7 +252,7 @@ class ParagraphUsageController extends ControllerBase {
    * Lists placed blocks, with where each is placed.
    *
    * @param array $block_ids
-   *   block_content entity ids.
+   *   Block content entity IDs.
    *
    * @return array
    *   Items for an item list.
@@ -300,7 +300,6 @@ class ParagraphUsageController extends ControllerBase {
       ],
     ];
   }
-
 
   /**
    * Title callback for a paragraph type's usage page.
